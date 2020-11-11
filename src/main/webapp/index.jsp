@@ -11,6 +11,6 @@
     <title>$Title$</title>
   </head>
   <body>
-  $END$
+  Hello！欢迎来到轻聊服务端！
   </body>
 </html>
