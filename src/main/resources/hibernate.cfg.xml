@@ -8,7 +8,7 @@
         <!-- 数据库链接驱动 -->
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <!--链接地址用户名密码 -->
-        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/qingliao?serverTimezone=CST&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</property>
+        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/i_talker?serverTimezone=CST&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</property>
         <property name="connection.username">root</property>
         <property name="connection.password">ljr141128</property>
 
@@ -19,7 +19,7 @@
         <property name="connection.pool_size">5</property>
 
         <!-- SQL 方言 -->
-        <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 
         <!-- Hibernate session 上下文为线程级别 -->
         <property name="current_session_context_class">thread</property>
@@ -47,7 +47,8 @@
         <property name="format_sql">true</property>
 
         <!-- 自动更新数据库的级别 -->
-        <property name="hbm2ddl.auto">update</property>
+<!--        <property name="hbm2ddl.auto">update</property>-->
+        <property name="hibernate.hbm2ddl.auto">update</property>
         <!--
         create：表示启动的时候先drop，再create
         create-drop: 也表示创建，只不过再系统关闭前执行一下drop
@@ -55,24 +56,24 @@
         validate: 启动时验证现有schema与你配置的hibernate是否一致，如果不一致就抛出异常，并不做更新
         -->
 
+        <!--数据库映射-->
+        <mapping package="com.iwen.web.qingliao.push.bean.db"
+                 class="com.iwen.web.qingliao.push.bean.db.User"/>
+        <mapping package="com.iwen.web.qingliao.push.bean.db"
+                 class="com.iwen.web.qingliao.push.bean.db.UserFollow"/>
 
-<!--        <mapping package="com.wuyou.web.italker.push.bean.db"-->
-<!--                 class="com.wuyou.web.italker.push.bean.db.User"/>-->
-<!--        <mapping package="com.wuyou.web.italker.push.bean.db"-->
-<!--                 class="com.wuyou.web.italker.push.bean.db.UserFollow"/>-->
+        <mapping package="com.iwen.web.qingliao.push.bean.db"
+                 class="com.iwen.web.qingliao.push.bean.db.Group"/>
+        <mapping package="com.iwen.web.qingliao.push.bean.db"
+                 class="com.iwen.web.qingliao.push.bean.db.GroupMember"/>
 
-<!--        <mapping package="com.wuyou.web.italker.push.bean.db"-->
-<!--                 class="com.wuyou.web.italker.push.bean.db.Group"/>-->
-<!--        <mapping package="com.wuyou.web.italker.push.bean.db"-->
-<!--                 class="com.wuyou.web.italker.push.bean.db.GroupMember"/>-->
+        <mapping package="com.iwen.web.qingliao.push.bean.db"
+                 class="com.iwen.web.qingliao.push.bean.db.Message"/>
 
-<!--        <mapping package="com.wuyou.web.italker.push.bean.db"-->
-<!--                 class="com.wuyou.web.italker.push.bean.db.Message"/>-->
-
-<!--        <mapping package="com.wuyou.web.italker.push.bean.db"-->
-<!--                 class="com.wuyou.web.italker.push.bean.db.PushHistory"/>-->
-<!--        <mapping package="com.wuyou.web.italker.push.bean.db"-->
-<!--                 class="com.wuyou.web.italker.push.bean.db.Apply"/>-->
+        <mapping package="com.iwen.web.qingliao.push.bean.db"
+                 class="com.iwen.web.qingliao.push.bean.db.PushHistory"/>
+        <mapping package="com.iwen.web.qingliao.push.bean.db"
+                 class="com.iwen.web.qingliao.push.bean.db.Apply"/>
 
     </session-factory>
 </hibernate-configuration>

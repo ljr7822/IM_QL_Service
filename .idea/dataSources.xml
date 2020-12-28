@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="MySQL - @localhost" uuid="da86222e-cfda-4940-9dd7-b223ae1ede0a">
+    <data-source source="LOCAL" name="hibernate.cfg.xml/Hibernate" uuid="41ca47b3-4552-4f33-95ce-31c7e01e085a">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>Hibernate
+
+D:/Data/JavaData/QingLiao/src/main/resources/hibernate.cfg.xml</remarks>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://127.0.0.1:3306/i_talker?serverTimezone=CST&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="i_talker@localhost" uuid="a5d50b93-0a5b-44f0-a047-e4a4f8cb40e9">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/i_talker</jdbc-url>
     </data-source>
   </component>
 </project>
