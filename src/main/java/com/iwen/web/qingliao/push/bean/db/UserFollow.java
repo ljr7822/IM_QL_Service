@@ -15,11 +15,14 @@ import java.util.Set;
  * 用于用户直接进行的好友关系的实现
  *
  * @Author: iwen大大怪
- * @DateTime: 2020/11/15 20:06
+ * @DateTime: 2021/02/04 15:31
  */
 @Entity
 @Table(name = "TB_USER_FOLLOW")
 public class UserFollow {
+    /**
+     * 用户id
+     */
     @Id
     @PrimaryKeyJoinColumn
     @GeneratedValue(generator = "uuid")
@@ -28,32 +31,34 @@ public class UserFollow {
     private String id;
 
     /**
-     * 定义一个发起人，你关注某人，这里就是你
+     * 一个发起人，你关注某人，这里就是你
      * 多对一 你可以关注很多人，你的每一次关注都是一条记录
      * 你可以创建很多个关注的信息，所有都是多对一
      * 这里的多对一: 一个User 对应 多个UserFollow
      * optional 不可选 必须存储，一条关注记录一定要有一个“你”
      */
     @ManyToOne(optional = false)
-    // 定义关联的表字段名为 originId，对应是 User.id
-    @JoinColumn(name = "originId")
+    @JoinColumn(name = "originId")// 定义关联的表字段名为 originId，对应是 User.id
     private User origin;
 
-    // 把这个列提取到model中，不允许为空，不允许更新、插入
+    /**
+     * 把这个列提取到model中，不允许为空，不允许更新、插入
+     */
     @Column(updatable = false, nullable = false, insertable = false)
     private String originId;
 
     /**
-     * 定义关注的目标，你关注某人，这里就某人
+     * 关注的目标，你关注某人，这里就某人
      * 多对一 你可以被很多人关注，每一次关注都是一条记录
      * 即 多个UserFollow 对应 一个User 的情况
      */
     @ManyToOne(optional = false)
-    // 定义关联的表字段名为 targetId，对应是 User.id
-    @JoinColumn(name = "targetId")
+    @JoinColumn(name = "targetId") // 定义关联的表字段名为 targetId，对应是 User.id
     private User target;
 
-    // 把这个列提取到model中，不允许为空，不允许更新、插入
+    /**
+     * 把这个列提取到model中，不允许为空，不允许更新、插入
+     */
     @Column(updatable = false, nullable = false, insertable = false)
     private String targetId;
 
@@ -63,33 +68,19 @@ public class UserFollow {
     @Column
     private String alias;
 
-    //定义为创建时间戳，在创建时就已经写入
+    /**
+     * 定义为创建时间戳，在创建时就已经写入
+     */
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime createAt = LocalDateTime.now();
 
-    //定义为更新时间戳
+    /**
+     * 定义为更新时间戳
+     */
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updateAt = LocalDateTime.now();
-
-    //我关注的人的列表方法
-    //对应的数据库表字段为 TB_USER_FOLLOW.originId
-    @JoinColumn(name = "originId")
-    //定义为懒加载，定义加载User信息时并不查询这个集合
-    @LazyCollection(LazyCollectionOption.EXTRA)
-    //一对多，一个用户可以有很多关注人，每一次关注都是一个记录
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<UserFollow> following = new HashSet<>();
-
-    //关注我的人列表
-    //对应的数据库表字段为 TB_USER_FOLLOW.targetId
-    @JoinColumn(name = "targetId")
-    //定义为懒加载，定义加载User信息时并不查询这个集合
-    @LazyCollection(LazyCollectionOption.EXTRA)
-    //一对多，一个用户可以被很多人关注，每一次关注都是一个记录
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<UserFollow> followers = new HashSet<>();
 
     public String getId() {
         return id;

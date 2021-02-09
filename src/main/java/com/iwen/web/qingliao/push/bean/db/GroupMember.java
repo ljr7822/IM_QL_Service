@@ -1,5 +1,6 @@
 package com.iwen.web.qingliao.push.bean.db;
 
+import com.iwen.web.qingliao.push.bean.db.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,18 +12,25 @@ import java.time.LocalDateTime;
  * 群成员
  *
  * @Author: iwen大大怪
- * @DateTime: 11-25 025 12:21
+ * @DateTime: 2021/02/04 21:24
  */
 @Entity
 @Table(name = "TB_GROUP_MEMBER")
 public class GroupMember {
-    public static final int NOTIFY_LEVEL_INVALID = -1;// 默认不接受消息
-    public static final int NOTIFY_LEVEL_NONE = 0;// 默认通知级别
-    public static final int NOTIFY_LEVEL_CLOSE = 1;// 接收消息不提示
 
-    public static final int PERMISSION_TYPE_NONE = 0;// 默认权限，普通群员
-    public static final int PERMISSION_TYPE_ADMIN = 1;// 管理员
-    public static final int PERMISSION_TYPE_ADMIN_SU = 100;// 创建者，群主
+    // 默认不接受消息
+    public static final int NOTIFY_LEVEL_INVALID = -1;
+    // 默认通知级别
+    public static final int NOTIFY_LEVEL_NONE = 0;
+    // 接收消息不提示
+    public static final int NOTIFY_LEVEL_CLOSE = 1;
+    // 默认权限，普通群员
+    public static final int PERMISSION_TYPE_NONE = 0;
+    // 管理员
+    public static final int PERMISSION_TYPE_ADMIN = 1;
+    // 创建者，群主
+    public static final int PERMISSION_TYPE_ADMIN_SU = 100;
+
     @Id
     @PrimaryKeyJoinColumn
     @GeneratedValue(generator = "uuid")
@@ -30,15 +38,41 @@ public class GroupMember {
     @Column(updatable = false, nullable = false)
     private String id;
 
-    // 别名
+    /**
+     * 别名 昵称
+     */
     @Column
     private String alias;
 
-    // 通知消息级别
+    /**
+     * 通知消息级别
+     */
     @Column(nullable = false)
     private int notifyLevel = NOTIFY_LEVEL_NONE;
 
-    // 成员信息对应的用户信息
+    /**
+     * 成员的权限类型
+     */
+    @Column(nullable = false)
+    private int permissionType = PERMISSION_TYPE_NONE;
+
+    /**
+     * 定义为创建时间戳，在创建时就已经写入
+     */
+    @CreationTimestamp
+    @Column(nullable = false)
+    private LocalDateTime createAt = LocalDateTime.now();
+
+    /**
+     * 定义为更新时间戳
+     */
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime updateAt = LocalDateTime.now();
+
+    /**
+     * 成员信息对应的用户信息
+     */
     @JoinColumn(name = "userId")
     @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;
@@ -46,36 +80,15 @@ public class GroupMember {
     @Column(nullable = false, updatable = false, insertable = false)
     private String userId;
 
-    // 成员信息对应的群信息
+    /**
+     * 成员信息对应的群信息
+     */
     @JoinColumn(name = "groupId")
     @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Group group;
 
     @Column(nullable = false, updatable = false, insertable = false)
     private String groupId;
-
-    // 成员的权限类型
-    @Column(nullable = false)
-    private int permissionType = PERMISSION_TYPE_NONE;
-
-    // 定义为创建时间戳，在创建时就已经写入
-    @CreationTimestamp
-    @Column(nullable = false)
-    private LocalDateTime createAt = LocalDateTime.now();
-
-    // 定义为更新时间戳
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private LocalDateTime updateAt = LocalDateTime.now();
-
-    public GroupMember() {
-
-    }
-
-    public GroupMember(User user, Group group) {
-        this.user = user;
-        this.group = group;
-    }
 
     public String getId() {
         return id;

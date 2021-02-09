@@ -1,5 +1,6 @@
 package com.iwen.web.qingliao.push.bean.db;
 
+import com.iwen.web.qingliao.push.bean.db.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
  * 群组 model
  *
  * @Author: iwen大大怪
- * @DateTime: 2020/11/15 22:18
+ * @DateTime: 2021/02/04 20:59
  */
 @Entity
 @Table(name = "TB_GROUP")
@@ -24,7 +25,9 @@ public class Group {
     @Column(updatable = false, nullable = false)
     private String id;
 
-    // 群名称
+    /**
+     * 群名称
+     */
     @Column(nullable = false)
     private String name;
 
@@ -41,20 +44,28 @@ public class Group {
     @Column(nullable = false, updatable = false, insertable = false)
     private String ownerId;
 
-    // 群描述
+    /**
+     * 群描述 不允许为空
+     */
     @Column(nullable = false)
     private String description;
 
-    // 群头像
+    /**
+     * 群头像 不允许为空
+     */
     @Column(nullable = false)
     private String picture;
 
-    // 定义为创建时间戳，在创建时就已经写入
+    /**
+     * 定义为创建时间戳，在创建时就已经写入
+     */
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime createAt = LocalDateTime.now();
 
-    // 定义为更新时间戳
+    /**
+     * 定义为更新时间戳
+     */
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updateAt = LocalDateTime.now();
@@ -105,5 +116,21 @@ public class Group {
 
     public void setUpdateAt(LocalDateTime updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 }

@@ -64,7 +64,7 @@ public class UserService extends BaseService {
     public ResponseModel<UserCard> follow(@PathParam("followId") String followId) {
         User self = getSelf();
         // 不能关注自己
-        if (self.getId().equalsIgnoreCase(followId)|| Strings.isNullOrEmpty(followId)) {
+        if (self.getId().equalsIgnoreCase(followId) || Strings.isNullOrEmpty(followId)) {
             // 返回参数异常
             return ResponseModel.buildParameterError();
         }
@@ -91,34 +91,34 @@ public class UserService extends BaseService {
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseModel<UserCard> getUser(@PathParam("id") String id){
-        if (Strings.isNullOrEmpty(id)){
+    public ResponseModel<UserCard> getUser(@PathParam("id") String id) {
+        if (Strings.isNullOrEmpty(id)) {
             // 参数异常
             return ResponseModel.buildParameterError();
         }
         User self = getSelf();
-        if (self.getId().equalsIgnoreCase(id)){
+        if (self.getId().equalsIgnoreCase(id)) {
             // 返回自己
-            return ResponseModel.buildOk(new UserCard(self,true));
+            return ResponseModel.buildOk(new UserCard(self, true));
         }
 
         User user = UserFactory.findById(id);
-        if (user==null){
+        if (user == null) {
             // 没找到该联系人，返回没找到该用户异常
             return ResponseModel.buildNotFoundUserError(null);
         }
         // 如果我们之间有关注的记录，则我已关注需要查询信息的用户
-        boolean isFollow = UserFactory.getUserFollow(self,user)!=null;
-        return ResponseModel.buildOk(new UserCard(user,isFollow));
+        boolean isFollow = UserFactory.getUserFollow(self, user) != null;
+        return ResponseModel.buildOk(new UserCard(user, isFollow));
     }
 
     // 搜索人的接口
-    // 为了简化分页，只返回20
+    // 为了简化分页，只返回20条数据
     @GET // 不涉及数据更改
     @Path("/search/{name:(.*)?}") // name为任意字符，允许为空
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseModel<List<UserCard>> search(@DefaultValue("") @PathParam("name") String name){
+    public ResponseModel<List<UserCard>> search(@DefaultValue("") @PathParam("name") String name) {
         User self = getSelf();
         // 查询用户
         List<User> searchUsers = UserFactory.search(name);
@@ -128,11 +128,11 @@ public class UserService extends BaseService {
         // 把user装换成userCard
         List<UserCard> userCards = searchUsers.stream()
                 .map(user -> {
-                    // 判断中国人是否是我自己或者是否是在我的联系人中
+                    // 判断这个人是否是我自己或者是否是在我的联系人中
                     boolean isFollow = user.getId().equalsIgnoreCase(self.getId())
-                            || contacts.stream().anyMatch(
-                                    contactUser->contactUser.getId().equalsIgnoreCase(user.getId()));
-                    return new UserCard(user,isFollow);
+                            // 进行联系人的任意匹配，匹配其中的Id字段
+                            || contacts.stream().anyMatch(contactUser -> contactUser.getId().equalsIgnoreCase(user.getId()));
+                    return new UserCard(user, isFollow);
                 }).collect(Collectors.toList());
         // 返回
         return ResponseModel.buildOk(userCards);

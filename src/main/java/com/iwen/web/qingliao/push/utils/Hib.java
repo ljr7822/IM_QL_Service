@@ -119,7 +119,6 @@ public class Hib {
         Session session = sessionFactory.openSession();
         // 开启事物
         final Transaction transaction = session.beginTransaction();
-
         T t = null;
         try {
             // 调用传递进来的接口，
@@ -139,9 +138,6 @@ public class Hib {
             // 无论成功失败，都需要关闭Session
             session.close();
         }
-
         return t;
     }
-
-
 }

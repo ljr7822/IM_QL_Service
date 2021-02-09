@@ -9,14 +9,17 @@ import java.time.LocalDateTime;
 
 /**
  * 申请记录表
+ *
  * @Author: iwen大大怪
- * @DateTime: 11-25 025 12:36
+ * @DateTime: 2021/02/04 21:57
  */
 @Entity
 @Table(name = "TB_APPLY")
 public class Apply {
-    public static final int TYPE_ADD_USER = 1;//加好友
-    public static final int TYPE_ADD_GROUP = 2;//加好友
+    //加好友
+    public static final int TYPE_ADD_USER = 1;
+    //加好友
+    public static final int TYPE_ADD_GROUP = 2;
 
     @Id
     @PrimaryKeyJoinColumn
@@ -25,16 +28,21 @@ public class Apply {
     @Column(updatable = false, nullable = false)
     private String id;
 
-
-    //描述,申请信息 eg：约吗？
+    /**
+     * 描述,申请信息 eg：约吗？
+     */
     @Column(nullable = false)
     private String description;
 
-    //附件,可为空，可以附带图片地址，或者其他
+    /**
+     * 附件,可为空，可以附带图片地址，或者其他
+     */
     @Column(columnDefinition = "TEXT")
     private String attach;
 
-    //当前申请的类型
+    /**
+     * 当前申请的类型
+     */
     @Column(nullable = false)
     private int type;
 
@@ -45,7 +53,10 @@ public class Apply {
      */
     @Column(nullable = false)
     private String targetId;
-    //申请人，可为空（系统信息），一个人可以有很多个申请
+
+    /**
+     * 申请人，可为空（系统信息），一个人可以有很多个申请
+     */
     @ManyToOne
     @JoinColumn(name = "applicantId")
     private User applicant;
@@ -53,12 +64,16 @@ public class Apply {
     @Column(updatable = false, insertable = false)
     private String applicantId;
 
-    //定义为创建时间戳，在创建时就已经写入
+    /**
+     * 定义为创建时间戳，在创建时就已经写入
+     */
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime createAt = LocalDateTime.now();
 
-    //定义为更新时间戳
+    /**
+     * 定义为更新时间戳
+     */
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updateAt = LocalDateTime.now();
@@ -135,4 +150,3 @@ public class Apply {
         this.updateAt = updateAt;
     }
 }
-

@@ -8,7 +8,7 @@
         <!-- 数据库链接驱动 -->
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <!--链接地址用户名密码 -->
-        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/i_talker?serverTimezone=CST&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</property>
+        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/im_qingliao?serverTimezone=CST&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</property>
         <property name="connection.username">root</property>
         <property name="connection.password">ljr141128</property>
 
@@ -19,7 +19,7 @@
         <property name="connection.pool_size">5</property>
 
         <!-- SQL 方言 -->
-        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
 
         <!-- Hibernate session 上下文为线程级别 -->
         <property name="current_session_context_class">thread</property>

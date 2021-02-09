@@ -158,7 +158,7 @@ public class UserFactory {
     public static User register(String account, String password, String name) {
         // 去除账户中的首尾空格
         account = account.trim();
-        // 密码加密
+        // 密码使用MD5加密
         password = encodePassword(password);
         User user = createUser(account, password, name);
         // 如果创建成功
@@ -197,7 +197,6 @@ public class UserFactory {
         user.setName(name);
         user.setPassword(password);
         user.setPhone(account);
-
         // 数据库存储
         return Hib.query(session -> {
             session.save(user);
@@ -248,16 +247,16 @@ public class UserFactory {
      * @return 被关注人的信息
      */
     public static User follow(final User origin, final User target, final String alias) {
-        UserFollow follow= getUserFollow(origin,target);
-        if (follow!=null){
+        UserFollow follow = getUserFollow(origin, target);
+        if (follow != null) {
             // 已经关注
             return follow.getTarget();
         }
 
         return Hib.query(session -> {
             // 想要重新操作懒加载的数据，需要重新load一次
-            session.load(origin,origin.getId());
-            session.load(target,target.getId());
+            session.load(origin, origin.getId());
+            session.load(target, target.getId());
             // 我关注人的时候，同时他也关注我
             // 所有需要添加两条UserFollow数据
             UserFollow originFollow = new UserFollow();
@@ -288,8 +287,8 @@ public class UserFactory {
     public static UserFollow getUserFollow(final User origin, final User target) {
         return Hib.query(session -> (UserFollow) session.createQuery(
                 "from UserFollow where originId=:originId and targetId=:targetId")
-                .setParameter("originId",origin.getId())
-                .setParameter("targetId",target.getId())
+                .setParameter("originId", origin.getId())
+                .setParameter("targetId", target.getId())
                 .setMaxResults(1)
                 // 查询一条数据
                 .uniqueResult());
@@ -297,23 +296,24 @@ public class UserFactory {
 
     /**
      * 搜索联系人的实现
+     *  and portrait is not null and desc is not null
+     *
      * @param name 查询的名字
      * @return 用户列表，如果name为空，则返回最近的用户
      */
     @SuppressWarnings("unchecked")
     public static List<User> search(String name) {
-        if (Strings.isNullOrEmpty(name)){
+        if (Strings.isNullOrEmpty(name)) {
             name = "";
         }
-        final String searchName = "%"+name+"%";
+        final String searchName = "%" + name + "%";
 
         return Hib.query(session -> {
             // 查询条件，name忽略大小写，使用like模糊查询，头像和描述必须完善才可以查询
-           return (List<User>) session.createQuery("from User where lower(name) like :name " +
-                   "and avatar is not null and description is not null")
-                   .setParameter("name",searchName)
-                   .setMaxResults(20) // 最多返回20条
-                   .list();
+            return (List<User>) session.createQuery("from User where lower(name) like :name and portrait is not null")
+                    .setParameter("name", searchName)
+                    .setMaxResults(20) // 最多返回20条
+                    .list();
         });
     }
 }

@@ -7,15 +7,16 @@ import com.iwen.web.qingliao.push.bean.db.User;
 /**
  * 用户更新信息，完善信息的Model
  *
- * @author iwen大大怪
+ * @Author: iwen大大怪
+ * @DateTime: 2021/02/06 0:25
  */
 public class UpdateInfoModel {
     @Expose
     private String name;
     @Expose
-    private String avatar;
+    private String portrait;
     @Expose
-    private String description;
+    private String desc;
     @Expose
     private int sex;
 
@@ -27,20 +28,20 @@ public class UpdateInfoModel {
         this.name = name;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getPortrait() {
+        return portrait;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public int getSex() {
@@ -62,30 +63,30 @@ public class UpdateInfoModel {
         if (!Strings.isNullOrEmpty(name)) {
             user.setName(name);
         }
-
-        if (!Strings.isNullOrEmpty(avatar)) {
-            user.setAvatar(avatar);
+        if (!Strings.isNullOrEmpty(portrait)) {
+            user.setPortrait(portrait);
         }
-
-        if (!Strings.isNullOrEmpty(description)) {
-            user.setDescription(description);
+        if (!Strings.isNullOrEmpty(desc)) {
+            user.setDescription(desc);
         }
-
         if (sex != 0) {
             user.setSex(sex);
         }
-
         return user;
     }
 
+    /**
+     * 校验数据
+     * 只需要具有一个及其以上的参数即可
+     *
+     * @param model 需要校验的数据 Model 不允许为null，
+     * @return 是否符合 true为符合
+     */
     public static boolean check(UpdateInfoModel model) {
-        // Model 不允许为null，
-        // 并且只需要具有一个及其以上的参数即可
         return model != null
                 && (!Strings.isNullOrEmpty(model.name) ||
-                !Strings.isNullOrEmpty(model.avatar) ||
-                !Strings.isNullOrEmpty(model.description) ||
+                !Strings.isNullOrEmpty(model.portrait) ||
+                !Strings.isNullOrEmpty(model.desc) ||
                 model.sex != 0);
     }
-
 }
