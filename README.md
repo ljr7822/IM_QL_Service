@@ -56,3 +56,11 @@
 
 - 2021.02.07 第十一次提交
     - 实现 搜索联系人的接口
+
+- 2021.02.14 第十二次提交
+    - 添加 一个推送的具体Model PushModel
+    - 添加 申请请求的Card ApplyCard
+    - 添加 群信息Model GroupCard
+    - 添加 群成员Model GroupMemberCard
+    - 添加 消息的卡片Model MessageCard
+  
