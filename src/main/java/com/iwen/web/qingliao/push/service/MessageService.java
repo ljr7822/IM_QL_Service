@@ -83,19 +83,18 @@ public class MessageService extends BaseService {
      * @return
      */
     private ResponseModel<MessageCard> pushToGroup(User sender, MessageCreateModel model) {
-//        // 找群是有权限性质的找
-//        Group group = GroupFactory.findById(sender, model.getReceiverId());
-//        if (group == null) {
-//            // 没有找到接收者群，有可能是你不是群的成员
-//            return ResponseModel.buildNotFoundUserError("Con't find receiver group");
-//        }
-//
-//        // 添加到数据库
-//        Message message = MessageFactory.add(sender, group, model);
-//
-//        // 走通用的推送逻辑
-//        return buildAndPushResponse(sender, message);
-        return null;
+        // 找群是有权限性质的找
+        Group group = GroupFactory.findById(sender, model.getReceiverId());
+        if (group == null) {
+            // 没有找到接收者群，有可能是你不是群的成员
+            return ResponseModel.buildNotFoundUserError("未找到该群！");
+        }
+
+        // 添加到数据库
+        Message message = MessageFactory.add(sender, group, model);
+
+        // 走通用的推送逻辑
+        return buildAndPushResponse(sender, message);
     }
 
     /**
