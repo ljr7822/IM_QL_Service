@@ -1,5 +1,6 @@
 package com.iwen.web.qingliao.push.bean.db;
 
+import com.iwen.web.qingliao.push.bean.api.message.MessageCreateModel;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -104,6 +105,43 @@ public class Message {
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updateAt = LocalDateTime.now();
+
+    public Message() {
+    }
+
+    /**
+     * 普通朋友的发送的构造函数
+     *
+     * @param sender   发送者
+     * @param receiver 接受者
+     * @param model    消息模型
+     */
+    public Message(User sender, User receiver, MessageCreateModel model) {
+        this.id = model.getId();
+        this.content = model.getContent();
+        this.attach = model.getAttach();
+        this.type = model.getType();
+
+        this.sender = sender;
+        this.receiver = receiver;
+    }
+
+    /**
+     * 发送给群的构造函数
+     *
+     * @param sender 发送者
+     * @param group  群
+     * @param model  消息模型
+     */
+    public Message(User sender, Group group, MessageCreateModel model) {
+        this.id = model.getId();
+        this.content = model.getContent();
+        this.attach = model.getAttach();
+        this.type = model.getType();
+
+        this.sender = sender;
+        this.group = group;
+    }
 
     public String getId() {
         return id;
