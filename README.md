@@ -72,4 +72,13 @@
     - 将发送的消息写入数据库
     - 实现 给某人发送消息
     - 实现 给群发送消息
+
+- 2021.03.4 第十五次提交
+    - 添加 群相关的Service
+    - 添加 群创建的Model public class GroupCreateModel {
+    - 添加 群聊添加成员的model GroupMemberAddModel
+    - 添加 修改群聊成员信息model GroupMemberUpdateModel
+    - 完善 推送一个退出消息
+    - 完善 得到关注人和粉丝的数量
+    - 完善 通知我关注的人我关注了他
   

@@ -6,6 +6,7 @@ import com.iwen.web.qingliao.push.bean.api.base.ResponseModel;
 import com.iwen.web.qingliao.push.bean.api.user.UpdateInfoModel;
 import com.iwen.web.qingliao.push.bean.card.UserCard;
 import com.iwen.web.qingliao.push.bean.db.User;
+import com.iwen.web.qingliao.push.factory.PushFactory;
 import com.iwen.web.qingliao.push.factory.UserFactory;
 import com.iwen.web.qingliao.push.utils.PushDispatcher;
 
@@ -92,7 +93,9 @@ public class UserService extends BaseService {
             // 关注失败，返回服务器异常
             return ResponseModel.buildServiceError();
         }
-        // TODO 通知无关注的人，我关注他
+        // 通知我关注的人我关注了他
+        // 给他发送一个我的信息过去
+        PushFactory.pushFollow(followUser, new UserCard(self));
 
         // 返回关注的人的信息
         return ResponseModel.buildOk(new UserCard(followUser, true));

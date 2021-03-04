@@ -1,6 +1,5 @@
 package com.iwen.web.qingliao.push.bean.db;
 
-import com.iwen.web.qingliao.push.bean.db.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -89,6 +88,15 @@ public class GroupMember {
 
     @Column(nullable = false, updatable = false, insertable = false)
     private String groupId;
+
+    public GroupMember() {
+
+    }
+
+    public GroupMember(User user, Group group) {
+        this.user = user;
+        this.group = group;
+    }
 
     public String getId() {
         return id;
