@@ -75,11 +75,12 @@
 
 - 2021.03.4 第十五次提交
     - 添加 群相关的Service
-    - 添加 群创建的Model public class GroupCreateModel {
+    - 添加 群创建的Model public class GroupCreateModel
     - 添加 群聊添加成员的model GroupMemberAddModel
     - 添加 修改群聊成员信息model GroupMemberUpdateModel
     - 完善 推送一个退出消息
     - 完善 得到关注人和粉丝的数量
     - 完善 通知我关注的人我关注了他
   
-  
+- 2021.04.25 第十六次提交
+    - 解决了 创建群时创建者id没有绑定ownerId导致客户端闪退问题

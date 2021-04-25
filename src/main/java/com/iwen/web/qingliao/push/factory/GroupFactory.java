@@ -1,5 +1,6 @@
 package com.iwen.web.qingliao.push.factory;
 
+
 import com.google.common.base.Strings;
 import com.iwen.web.qingliao.push.bean.api.group.GroupCreateModel;
 import com.iwen.web.qingliao.push.bean.db.Group;
@@ -62,7 +63,14 @@ public class GroupFactory {
         });
     }
 
-    // 创建群
+    /**
+     * 创建群
+     *
+     * @param creator  创建者
+     * @param model    创建model
+     * @param userList 群成员
+     * @return 一个群相关
+     */
     public static Group create(User creator, GroupCreateModel model, List<User> userList) {
         return Hib.query(session -> {
             Group group = new Group(creator, model);
@@ -77,13 +85,19 @@ public class GroupFactory {
                 // 保存，还没有提交到数据库
                 session.save(member);
             }
-            //session.flush();
-            //session.load(group, group.getId());
+            // session.flush();
+            // session.load(group, group.getId());
             return group;
         });
     }
 
-    // 获取一个群的成员
+    /**
+     * 获取一个群的成员
+     *
+     * @param userId  用户id
+     * @param groupId 群id
+     * @return 返回群成员
+     */
     public static GroupMember getMember(String userId, String groupId) {
         return Hib.query(session -> (GroupMember) session.createQuery("from GroupMember where userId=:userId and groupId=:groupId")
                 .setParameter("userId", userId)

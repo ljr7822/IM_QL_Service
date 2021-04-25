@@ -43,14 +43,14 @@ public class GroupService extends BaseService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseModel<GroupCard> create(GroupCreateModel model) {
-        // 先检查model
+        // 先检查创建群的model
         if (!GroupCreateModel.check(model)) {
             return ResponseModel.buildParameterError();
         }
 
         // 获取创建者
         User creator = getSelf();
-        // 创建者并不在表中
+        // 创建者并不在列表中
         model.getUsers().remove(creator.getId());
         if (model.getUsers().size() == 0) {
             return ResponseModel.buildParameterError();
@@ -60,6 +60,7 @@ public class GroupService extends BaseService {
             return ResponseModel.buildHaveNameError();
         }
 
+        // 拿到所有用户
         List<User> userList = new ArrayList<>();
         for (String s : model.getUsers()) {
             User user = UserFactory.findById(s);
@@ -93,7 +94,7 @@ public class GroupService extends BaseService {
             return ResponseModel.buildServiceError();
         }
         members = members.stream()
-                .filter(groupMember -> !groupMember.getId().equalsIgnoreCase(creator.getId()))
+                .filter(groupMember -> !groupMember.getId().equalsIgnoreCase(creatorMember.getId()))
                 .collect(Collectors.toSet());
         // 开始发起推送
         PushFactory.pushJoinGroup(members);
