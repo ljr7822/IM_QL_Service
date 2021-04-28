@@ -15,6 +15,7 @@ import com.iwen.web.qingliao.push.factory.GroupFactory;
 import com.iwen.web.qingliao.push.factory.PushFactory;
 import com.iwen.web.qingliao.push.factory.UserFactory;
 import com.iwen.web.qingliao.push.provider.LocalDateTimeConverter;
+import com.iwen.web.qingliao.push.utils.LogUtils;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
  */
 @Path("/group")
 public class GroupService extends BaseService {
+    private static final String TAG = "group";
 
     /**
      * 创建群
@@ -43,8 +45,10 @@ public class GroupService extends BaseService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseModel<GroupCard> create(GroupCreateModel model) {
+        LogUtils.error(TAG,"进入 /group 请求");
         // 先检查创建群的model
         if (!GroupCreateModel.check(model)) {
+            LogUtils.error(TAG,"创建群的参数错误");
             return ResponseModel.buildParameterError();
         }
 
@@ -53,10 +57,12 @@ public class GroupService extends BaseService {
         // 创建者并不在列表中
         model.getUsers().remove(creator.getId());
         if (model.getUsers().size() == 0) {
+            LogUtils.error(TAG,"创建群的参数错误");
             return ResponseModel.buildParameterError();
         }
         // 检查是否已有相同名字的群聊
         if (GroupFactory.findByName(model.getName()) != null) {
+            LogUtils.error(TAG,"存在相同群聊名称");
             return ResponseModel.buildHaveNameError();
         }
 
@@ -71,6 +77,7 @@ public class GroupService extends BaseService {
         }
         // 该群没有一个成员
         if (userList.size() == 0) {
+            LogUtils.error(TAG,"参数错误");
             return ResponseModel.buildParameterError();
         }
 
@@ -78,6 +85,7 @@ public class GroupService extends BaseService {
         Group group = GroupFactory.create(creator, model, userList);
         if (group == null) {
             // 服务器异常
+            LogUtils.error(TAG,"参数错误");
             return ResponseModel.buildServiceError();
         }
 
@@ -85,12 +93,14 @@ public class GroupService extends BaseService {
         GroupMember creatorMember = GroupFactory.getMember(creator.getId(), group.getId());
         if (creatorMember == null) {
             // 服务器异常
+            LogUtils.error(TAG,"没有管理员");
             return ResponseModel.buildServiceError();
         }
         // 拿到群成员，给所有的群成员发送信息：已经被添加到了XX群中
         Set<GroupMember> members = GroupFactory.getMembers(group);
         if (members == null) {
             // 服务器异常
+            LogUtils.error(TAG,"没有群成员");
             return ResponseModel.buildServiceError();
         }
         members = members.stream()
@@ -98,6 +108,7 @@ public class GroupService extends BaseService {
                 .collect(Collectors.toSet());
         // 开始发起推送
         PushFactory.pushJoinGroup(members);
+        LogUtils.error(TAG,"创建群成功");
         return ResponseModel.buildOk(new GroupCard(creatorMember));
     }
 
@@ -112,6 +123,7 @@ public class GroupService extends BaseService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseModel<List<GroupCard>> search(@PathParam("name") @DefaultValue("") String name) {
+        LogUtils.error(TAG,"进入 /group/search/{name} 请求");
         // 拿到自己的信息
         User self = getSelf();
         // 拿到群列表
@@ -122,8 +134,10 @@ public class GroupService extends BaseService {
                         GroupMember member = GroupFactory.getMember(self.getId(), group.getId());
                         return new GroupCard(group, member);
                     }).collect(Collectors.toList());
+            LogUtils.error(TAG,"查找群成功");
             return ResponseModel.buildOk(groupCards);
         }
+        LogUtils.error(TAG,"查找群成功");
         return ResponseModel.buildOk();
     }
 
@@ -138,6 +152,7 @@ public class GroupService extends BaseService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseModel<List<GroupCard>> list(@DefaultValue("") @PathParam("date") String dateStr) {
+        LogUtils.error(TAG,"进入 /group//list/{date} 请求");
         User self = getSelf();
         // 拿时间
         LocalDateTime dateTime = null;
@@ -150,6 +165,7 @@ public class GroupService extends BaseService {
         }
         Set<GroupMember> members = GroupFactory.getMembers(self);
         if (members == null || members.size() == 0) {
+            LogUtils.error(TAG,"获取members成功");
             return ResponseModel.buildOk();
         }
         final LocalDateTime localDateTime = dateTime;
@@ -157,6 +173,7 @@ public class GroupService extends BaseService {
                 .filter(groupMember -> localDateTime == null // 时间为null就不做限制
                         || groupMember.getUpdateAt().isAfter(localDateTime))// 时间不为null需要在这个时间之后
                 .map(GroupCard::new).collect(Collectors.toList());
+        LogUtils.error(TAG,"获取groupCards成功");
         return ResponseModel.buildOk(groupCards);
     }
 
@@ -186,14 +203,18 @@ public class GroupService extends BaseService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseModel<GroupCard> getGroup(@PathParam("groupId") String groupId) {
+        LogUtils.error(TAG,"进入 /group/{groupId} 请求");
         if (Strings.isNullOrEmpty(groupId)) {
+            LogUtils.error(TAG,"没有群id，参数错误");
             return ResponseModel.buildParameterError();
         }
         User self = getSelf();
         GroupMember member = GroupFactory.getMember(self.getId(), groupId);
         if (member == null) {
+            LogUtils.error(TAG,"没有加入这个群");
             return ResponseModel.buildNotFoundGroupError(null);
         }
+        LogUtils.error(TAG,"拉取群成功");
         return ResponseModel.buildOk(new GroupCard(member));
     }
 
@@ -208,21 +229,25 @@ public class GroupService extends BaseService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseModel<List<GroupMemberCard>> members(@PathParam("groupId") String groupId) {
+        LogUtils.error(TAG,"进入 /group/{groupId}/members 请求");
         User self = getSelf();
 
         // 没有这个群
         Group group = GroupFactory.findById(groupId);
         if (group == null) {
+            LogUtils.error(TAG,"没有该群");
             return ResponseModel.buildNotFoundGroupError(null);
         }
         // 检查权限
         GroupMember selfMember = GroupFactory.getMember(self.getId(), groupId);
         if (selfMember == null){
+            LogUtils.error(TAG,"参数错误");
             return ResponseModel.buildNoPermissionError();
     }
         // 所有的成员,必须是群成员之一
         Set<GroupMember> members = GroupFactory.getMembers(group);
         if (members == null) {
+            LogUtils.error(TAG,"服务器错误");
             return ResponseModel.buildServiceError();
         }
         // 返回
@@ -231,6 +256,7 @@ public class GroupService extends BaseService {
                 .map(GroupMemberCard::new)
                 .collect(Collectors.toList());
 
+        LogUtils.error(TAG,"拉取群成员成功");
         return ResponseModel.buildOk(memberCards);
     }
 

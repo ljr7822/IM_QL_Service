@@ -7,9 +7,12 @@ import com.iwen.web.qingliao.push.bean.api.account.RegisterModel;
 import com.iwen.web.qingliao.push.bean.api.base.ResponseModel;
 import com.iwen.web.qingliao.push.bean.db.User;
 import com.iwen.web.qingliao.push.factory.UserFactory;
+import com.iwen.web.qingliao.push.utils.LogUtils;
+import com.mysql.cj.log.Log;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.logging.Logger;
 import java.util.stream.StreamSupport;
 
 /**
@@ -21,7 +24,7 @@ import java.util.stream.StreamSupport;
  */
 @Path("/account")
 public class AccountService extends BaseService {
-
+    private static final String TAG = "account";
     /**
      * 登录接口
      *
@@ -33,8 +36,10 @@ public class AccountService extends BaseService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseModel<AccountRspModel> login(LoginModel model) {
+        LogUtils.error(TAG,"进入 /account/login 请求");
         if (!LoginModel.check(model)) {
             // 返回参数异常
+            LogUtils.error(TAG,"Parameters Error(参数异常)!");
             return ResponseModel.buildParameterError();
         }
         User user = UserFactory.login(model.getAccount(), model.getPassword());
@@ -46,9 +51,11 @@ public class AccountService extends BaseService {
             }
             // 返回当前账户
             AccountRspModel rspModel = new AccountRspModel(user);
+            LogUtils.error(TAG,"登录成功");
             return ResponseModel.buildOk(rspModel);
         } else {
             // 登录异常
+            LogUtils.error(TAG,"Account or password error(用户名或密码异常)!");
             return ResponseModel.buildLoginError();
         }
     }
@@ -64,18 +71,22 @@ public class AccountService extends BaseService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseModel<AccountRspModel> register(RegisterModel model) {
+        LogUtils.error(TAG,"进入 /account/register 请求");
         if (!RegisterModel.check(model)) {
             // 返回参数异常
+            LogUtils.error(TAG,"Parameters Error(参数异常)!");
             return ResponseModel.buildParameterError();
         }
         User user = UserFactory.findByPhone(model.getAccount().trim());
         if (user != null) {
             // 已经存在账户
+            LogUtils.error(TAG,"Already have this account(已经存在该账户)!");
             return ResponseModel.buildHaveAccountError();
         }
         user = UserFactory.findByName(model.getName().trim());
         if (user != null) {
             // 已经存在用户名
+            LogUtils.error(TAG,"已经存在该用户名");
             return ResponseModel.buildHaveAccountError();
         }
         // 开始注册逻辑
@@ -88,9 +99,11 @@ public class AccountService extends BaseService {
             }
             // 注册成功
             AccountRspModel accountRspModel = new AccountRspModel(user);
+            LogUtils.error(TAG,"注册成功");
             return ResponseModel.buildOk(accountRspModel);
         } else {
             // 注册异常
+            LogUtils.error(TAG,"注册异常");
             return ResponseModel.buildRegisterError();
         }
     }
@@ -108,6 +121,7 @@ public class AccountService extends BaseService {
     // 从请求头中获取token字段
     // pushId从url中获取
     public ResponseModel<AccountRspModel> bind(@PathParam("pushId") String pushId) {
+        LogUtils.error(TAG,"进入 /account/bind/{pushId} 请求");
         if (Strings.isNullOrEmpty(pushId)) {
             // 返回参数异常
             return ResponseModel.buildParameterError();
@@ -116,6 +130,7 @@ public class AccountService extends BaseService {
         // User user = UserFactory.findByToken(token);
         User self = getSelf();
         // 进行绑定
+        LogUtils.error(TAG,"开始进行设备绑定");
         return bind(self, pushId);
     }
 
@@ -131,10 +146,12 @@ public class AccountService extends BaseService {
         User user = UserFactory.bindPushId(self, pushId);
         if (user == null) {
             // 绑定失败
+            LogUtils.error(TAG,"绑定失败");
             return ResponseModel.buildServiceError();
         }
         // 绑定成功，返回当前账户
         AccountRspModel rspModel = new AccountRspModel(user, true);
+        LogUtils.error(TAG,"绑定成功");
         return ResponseModel.buildOk(rspModel);
     }
 }
