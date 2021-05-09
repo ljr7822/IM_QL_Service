@@ -72,7 +72,6 @@ public class Hib {
         }
     }
 
-
     // 用户的实际的操作的一个接口
     public interface QueryOnly {
         void query(Session session);
@@ -104,7 +103,6 @@ public class Hib {
             session.close();
         }
     }
-
 
     // 用户的实际的操作的一个接口
     // 具有返回值T

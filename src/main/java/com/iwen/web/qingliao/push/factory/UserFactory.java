@@ -7,6 +7,7 @@ import com.iwen.web.qingliao.push.utils.Hib;
 import com.iwen.web.qingliao.push.utils.TextUtil;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -114,7 +115,7 @@ public class UserFactory {
             // 如果我当前账户之前的设备ID，和需要绑定的不同，那么需要单点登录，让之前的设备退出账户，给之前的设备推送一条退出消息
             if (Strings.isNullOrEmpty(user.getPushId())) {
                 // 推送一个退出消息
-                PushFactory.pushLogout(user,user.getPushId());
+                PushFactory.pushLogout(user, user.getPushId());
             }
             // 更新新的设备id
             user.setPushId(pushId);
@@ -144,6 +145,25 @@ public class UserFactory {
             user = login(user);
         }
         return user;
+    }
+
+    /**
+     * 退出登录
+     *
+     * @param userId 用户id
+     * @return 默认返回”退出登录成功“
+     */
+    public static User logout(String userId) {
+        final String userIdStr = userId.trim();
+        // 通过userId查询这个用户
+        // 查询
+        User user = findById(userIdStr);
+        // 将这个用户的token设置为null
+        // 将这个用户的pushId设置为null
+        user.setPushId(null);
+        user.setToken(null);
+        // 数据库存储
+        return update(user);
     }
 
     /**
@@ -296,7 +316,7 @@ public class UserFactory {
 
     /**
      * 搜索联系人的实现
-     *  and portrait is not null and desc is not null
+     * and portrait is not null and desc is not null
      *
      * @param name 查询的名字
      * @return 用户列表，如果name为空，则返回最近的用户

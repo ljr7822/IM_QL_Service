@@ -8,6 +8,7 @@ import com.iwen.web.qingliao.push.bean.card.UserCard;
 import com.iwen.web.qingliao.push.bean.db.User;
 import com.iwen.web.qingliao.push.factory.PushFactory;
 import com.iwen.web.qingliao.push.factory.UserFactory;
+import com.iwen.web.qingliao.push.utils.LogUtils;
 import com.iwen.web.qingliao.push.utils.PushDispatcher;
 
 import javax.ws.rs.*;
@@ -21,13 +22,16 @@ import java.util.stream.Collectors;
  */
 @Path("/user")
 public class UserService extends BaseService {
+    private static final String TAG = "user";
     // 用户信息修改接口,返回自己的个人信息
     // 不需要写@Path，就是当前目录
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseModel<UserCard> update(UpdateInfoModel model) {
+        LogUtils.info(TAG,"开始进入 【/user】 请求");
         if (!UpdateInfoModel.check(model)) {
+            LogUtils.error(TAG,"【user】错误：检查用户修改模块内容错误");
             return ResponseModel.buildParameterError();
         }
         //拿到自己的个人信息
@@ -38,6 +42,7 @@ public class UserService extends BaseService {
         // 构建自己的用户信息
         UserCard userCard = new UserCard(self, true);
         // 返回
+        LogUtils.info(TAG,"【user】成功：用户信息修改成功");
         return ResponseModel.buildOk(userCard);
     }
 
@@ -47,6 +52,7 @@ public class UserService extends BaseService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseModel<List<UserCard>> contact() {
+        LogUtils.info(TAG,"开始进入 【/user/contact】 请求");
         User self = getSelf();
 
         /*
@@ -66,6 +72,7 @@ public class UserService extends BaseService {
                 .map(user -> new UserCard(user, true))
                 .collect(Collectors.toList());
         // 返回
+        LogUtils.info(TAG,"【user】成功：拉取联系人成功");
         return ResponseModel.buildOk(userCards);
     }
 
@@ -75,22 +82,26 @@ public class UserService extends BaseService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseModel<UserCard> follow(@PathParam("followId") String followId) {
+        LogUtils.info(TAG,"开始进入 【/user/follow/{followId}】 请求");
         User self = getSelf();
         // 不能关注自己
         if (self.getId().equalsIgnoreCase(followId) || Strings.isNullOrEmpty(followId)) {
             // 返回参数异常
+            LogUtils.error(TAG,"【user】错误：不能关注自己");
             return ResponseModel.buildParameterError();
         }
         // 找到我要关注的人
         User followUser = UserFactory.findById(followId);
         if (followUser == null) {
             // 未找到人
+            LogUtils.error(TAG,"【user】错误：未找到关注人");
             return ResponseModel.buildNotFoundUserError(null);
         }
         // 开始关注操作,备注默认没有·
         followUser = UserFactory.follow(self, followUser, null);
         if (followUser == null) {
             // 关注失败，返回服务器异常
+            LogUtils.error(TAG,"【user】错误：关注失败");
             return ResponseModel.buildServiceError();
         }
         // 通知我关注的人我关注了他
@@ -98,6 +109,7 @@ public class UserService extends BaseService {
         PushFactory.pushFollow(followUser, new UserCard(self));
 
         // 返回关注的人的信息
+        LogUtils.info(TAG,"【user】成功：关注成功");
         return ResponseModel.buildOk(new UserCard(followUser, true));
     }
 

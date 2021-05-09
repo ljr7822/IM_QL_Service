@@ -1,9 +1,7 @@
 package com.iwen.web.qingliao.push.service;
 
 import com.google.common.base.Strings;
-import com.iwen.web.qingliao.push.bean.api.account.AccountRspModel;
-import com.iwen.web.qingliao.push.bean.api.account.LoginModel;
-import com.iwen.web.qingliao.push.bean.api.account.RegisterModel;
+import com.iwen.web.qingliao.push.bean.api.account.*;
 import com.iwen.web.qingliao.push.bean.api.base.ResponseModel;
 import com.iwen.web.qingliao.push.bean.db.User;
 import com.iwen.web.qingliao.push.factory.UserFactory;
@@ -106,6 +104,41 @@ public class AccountService extends BaseService {
             LogUtils.error(TAG,"注册异常");
             return ResponseModel.buildRegisterError();
         }
+    }
+
+    /**
+     * 登录接口
+     *
+     * @param model 登录所需要的
+     * @return AccountRspModel
+     */
+    @POST
+    @Path("/logout")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseModel<LogoutRspModel> logout(LogoutModel model) {
+        LogUtils.error(TAG,"进入 /account/logout 请求");
+        if (!LogoutModel.check(model)) {
+            // 返回参数异常
+            LogUtils.error(TAG,"Parameters Error(参数异常)!");
+            return ResponseModel.buildParameterError();
+        }
+        // 开始退出登录
+        User user = UserFactory.logout(model.getAccount());
+        if (user!=null){
+            if (user.getToken()==null){
+                LogoutRspModel rspModel = new LogoutRspModel("退出登录成功");
+                LogUtils.error(TAG,"退出登录成功");
+                return ResponseModel.buildOk(rspModel);
+            }else {
+                // 退出登录异常
+                LogUtils.error(TAG,"退出登录异常");
+                return ResponseModel.buildLoginError();
+            }
+        }
+        // 退出登录异常
+        LogUtils.error(TAG,"退出登录异常");
+        return ResponseModel.buildLoginError();
     }
 
     /**
