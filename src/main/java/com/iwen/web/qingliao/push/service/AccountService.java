@@ -6,12 +6,9 @@ import com.iwen.web.qingliao.push.bean.api.base.ResponseModel;
 import com.iwen.web.qingliao.push.bean.db.User;
 import com.iwen.web.qingliao.push.factory.UserFactory;
 import com.iwen.web.qingliao.push.utils.LogUtils;
-import com.mysql.cj.log.Log;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.logging.Logger;
-import java.util.stream.StreamSupport;
 
 /**
  * 账户相关服务入口
@@ -107,10 +104,10 @@ public class AccountService extends BaseService {
     }
 
     /**
-     * 登录接口
+     * 退出登录接口
      *
-     * @param model 登录所需要的
-     * @return AccountRspModel
+     * @param model 退出登录所需要的
+     * @return LogoutRspModel
      */
     @POST
     @Path("/logout")
@@ -140,6 +137,38 @@ public class AccountService extends BaseService {
         LogUtils.error(TAG,"退出登录异常");
         return ResponseModel.buildLoginError();
     }
+
+    /**
+     * 修改密码接口
+     *
+     * @param model 退出登录所需要的
+     * @return AccountRspModel
+     */
+    @POST
+    @Path("/changepwd")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseModel<AccountRspModel> changePwd(ChangePwdModel model) {
+        LogUtils.error(TAG,"进入 /account/changepwd 请求");
+        if (!ChangePwdModel.check(model)) {
+            // 返回参数异常
+            LogUtils.error(TAG,"Parameters Error(参数异常)!");
+            return ResponseModel.buildParameterError();
+        }
+        // 开始修改密码
+        User user = UserFactory.changePwd(model);
+        if (user != null) {
+            // 返回当前账户
+            AccountRspModel rspModel = new AccountRspModel(user);
+            LogUtils.error(TAG,"修改密码成功");
+            return ResponseModel.buildOk(rspModel);
+        } else {
+            // 修改密码异常
+            LogUtils.error(TAG,"修改密码异常!");
+            return ResponseModel.buildLoginError();
+        }
+    }
+
 
     /**
      * 绑定设备id

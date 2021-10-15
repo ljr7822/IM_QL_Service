@@ -1,11 +1,14 @@
 package com.iwen.web.qingliao.push.factory;
 
 import com.google.common.base.Strings;
+import com.iwen.web.qingliao.push.bean.api.account.ChangePwdModel;
 import com.iwen.web.qingliao.push.bean.db.User;
 import com.iwen.web.qingliao.push.bean.db.UserFollow;
 import com.iwen.web.qingliao.push.utils.Hib;
+import com.iwen.web.qingliao.push.utils.LogUtils;
 import com.iwen.web.qingliao.push.utils.TextUtil;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -17,6 +20,8 @@ import java.util.stream.Collectors;
  * @DateTime: 12-2 002 16:08
  */
 public class UserFactory {
+
+    private static final String TAG = "UserFactory";
 
     /**
      * 通过Token找到user
@@ -335,5 +340,33 @@ public class UserFactory {
                     .setMaxResults(20) // 最多返回20条
                     .list();
         });
+    }
+
+    /**
+     * 修改密码方法
+     *
+     * @param model 修改密码传入的model
+     * @return 一个新的用户
+     */
+    public static User changePwd(ChangePwdModel model) {
+        final String userIdStr = model.getUserId().trim();
+        final String oldPwdStr = model.getOldPwd().trim();
+        final String newPwdStr = model.getNewPwd().trim();
+        final String encodeOldPassword = encodePassword(oldPwdStr);
+        final String encodeNewPassword = encodePassword(newPwdStr);
+        // 查询用户
+        User user = findById(userIdStr);
+        // 判断原密码是否正确
+        if (!encodeOldPassword.equals(user.getPassword())) {
+            // 不允许修改密码
+            LogUtils.error(TAG, "不允许修改密码");
+            LogUtils.error(TAG, "原密码" + user.getPassword());
+            LogUtils.error(TAG, "新密码" + encodeOldPassword);
+            return null;
+        }
+        // 可以修改密码
+        LogUtils.error(TAG, "可以修改密码");
+        user.setPassword(encodeNewPassword);
+        return update(user);
     }
 }
