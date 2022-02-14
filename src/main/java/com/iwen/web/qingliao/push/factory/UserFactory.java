@@ -311,7 +311,7 @@ public class UserFactory {
      */
     public static UserFollow getUserFollow(final User origin, final User target) {
         return Hib.query(session -> (UserFollow) session.createQuery(
-                "from UserFollow where originId=:originId and targetId=:targetId")
+                        "from UserFollow where originId=:originId and targetId=:targetId")
                 .setParameter("originId", origin.getId())
                 .setParameter("targetId", target.getId())
                 .setMaxResults(1)
@@ -350,23 +350,96 @@ public class UserFactory {
      */
     public static User changePwd(ChangePwdModel model) {
         final String userIdStr = model.getUserId().trim();
-        final String oldPwdStr = model.getOldPwd().trim();
         final String newPwdStr = model.getNewPwd().trim();
-        final String encodeOldPassword = encodePassword(oldPwdStr);
         final String encodeNewPassword = encodePassword(newPwdStr);
         // 查询用户
         User user = findById(userIdStr);
         // 判断原密码是否正确
-        if (!encodeOldPassword.equals(user.getPassword())) {
-            // 不允许修改密码
-            LogUtils.error(TAG, "不允许修改密码");
-            LogUtils.error(TAG, "原密码" + user.getPassword());
-            LogUtils.error(TAG, "新密码" + encodeOldPassword);
-            return null;
-        }
+//        if (!encodeOldPassword.equals(user.getPassword())) {
+//            // 不允许修改密码
+//            LogUtils.error(TAG, "不允许修改密码");
+//            LogUtils.error(TAG, "原密码" + user.getPassword());
+//            LogUtils.error(TAG, "新密码" + encodeOldPassword);
+//            return null;
+//        }
         // 可以修改密码
         LogUtils.error(TAG, "可以修改密码");
         user.setPassword(encodeNewPassword);
+        return update(user);
+    }
+
+    /**
+     * 修改用户名
+     *
+     * @param userId 用户id
+     * @param mName  新用户名
+     * @return User
+     */
+    public static User modifyUserName(String userId, String mName) {
+        // 查询用户
+        User user = findById(userId);
+        LogUtils.info(TAG, "start modify user name");
+        user.setName(mName);
+        return update(user);
+    }
+
+    /**
+     * 修改个性签名
+     *
+     * @param userId 用户id
+     * @param mDesc  新签名
+     * @return User
+     */
+    public static User modifyUserDesc(String userId, String mDesc) {
+        // 查询用户
+        User user = findById(userId);
+        LogUtils.info(TAG, "start modify user desc>>>");
+        user.setDescription(mDesc);
+        return update(user);
+    }
+
+    /**
+     * 修改个性签名
+     *
+     * @param userId 用户id
+     * @param mSchool  新签名
+     * @return User
+     */
+    public static User modifyUserSchool(String userId, String mSchool) {
+        // 查询用户
+        User user = findById(userId);
+        LogUtils.info(TAG, "start modify user school>>>");
+        user.setSchool(mSchool);
+        return update(user);
+    }
+
+    /**
+     * 修改性别
+     *
+     * @param userId 用户id
+     * @param mSex  性别
+     * @return User
+     */
+    public static User modifyUserSex(String userId, int mSex) {
+        // 查询用户
+        User user = findById(userId);
+        LogUtils.info(TAG, "start modify user sex>>>");
+        user.setSex(mSex);
+        return update(user);
+    }
+
+    /**
+     * 修改地址
+     *
+     * @param userId 用户id
+     * @param mAddress  地址
+     * @return User
+     */
+    public static User modifyUserAddress(String userId, String mAddress) {
+        // 查询用户
+        User user = findById(userId);
+        LogUtils.info(TAG, "start modify user address>>>");
+        user.setAddress(mAddress);
         return update(user);
     }
 }

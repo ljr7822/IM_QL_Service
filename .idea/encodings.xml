@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/main/java/com/iwen/web/qingliao/push/bean/api/account/ChangePwdModel.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/iwen/web/qingliao/push/bean/api/account/LogoutModel.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/iwen/web/qingliao/push/bean/api/account/LogoutRspModel.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/iwen/web/qingliao/push/bean/api/community/comment/AddCommentModel.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/iwen/web/qingliao/push/bean/db/Feeds.java" charset="GBK" />
     <file url="PROJECT" charset="GBK" />
   </component>
 </project>

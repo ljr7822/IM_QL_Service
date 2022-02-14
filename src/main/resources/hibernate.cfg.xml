@@ -54,6 +54,11 @@
         create-drop: 也表示创建，只不过再系统关闭前执行一下drop
         update: 这个操作启动的时候会去检查schema是否一致，如果不一致会做scheme更新
         validate: 启动时验证现有schema与你配置的hibernate是否一致，如果不一致就抛出异常，并不做更新
+
+        update：表示自动根据model对象来更新表结构，启动hibernate时会自动检查数据库，如果缺少表，则自动建表；如果表里缺少列，则自动添加列。
+        create：启动hibernate时，自动删除原来的表，新建所有的表，所以每次启动后的以前数据都会丢失。
+        create-drop：启动hibernate时，自动创建表，程序关闭时，自动把相应的表都删除。所以程序结束时，表和数据也不会再存在。
+        validate ：每次加载hibernate时，验证创建数据库表结构，只会和数据库中的表进行比较，不会创建新表，但是会插入新值。
         -->
 
         <!--数据库映射-->
@@ -74,6 +79,22 @@
                  class="com.iwen.web.qingliao.push.bean.db.PushHistory"/>
         <mapping package="com.iwen.web.qingliao.push.bean.db"
                  class="com.iwen.web.qingliao.push.bean.db.Apply"/>
+
+        <!-- 热门帖子-->
+        <mapping package="com.iwen.web.qingliao.push.bean.db"
+                 class="com.iwen.web.qingliao.push.bean.db.Feeds"/>
+
+        <!-- 帖子评论-->
+        <mapping package="com.iwen.web.qingliao.push.bean.db"
+                 class="com.iwen.web.qingliao.push.bean.db.FeedComment"/>
+
+        <!-- 评论点赞-->
+        <mapping package="com.iwen.web.qingliao.push.bean.db"
+                 class="com.iwen.web.qingliao.push.bean.db.FeedCommentLike"/>
+
+        <!-- 评论ugc-->
+        <mapping package="com.iwen.web.qingliao.push.bean.db"
+                 class="com.iwen.web.qingliao.push.bean.db.FeedUgc"/>
 
     </session-factory>
 </hibernate-configuration>

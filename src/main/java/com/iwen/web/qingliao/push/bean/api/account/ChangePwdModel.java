@@ -4,9 +4,9 @@ import com.google.common.base.Strings;
 import com.google.gson.annotations.Expose;
 
 /**
- * ĞŞ¸ÄÃÜÂëĞèÒªµÄ
+ * ä¿®æ”¹å¯†ç éœ€è¦çš„
  *
- * @Author: iwen´ó´ó¹Ö
+ * @Author: iwenå¤§å¤§æ€ª
  * @DateTime: 2021/05/10 1:24
  */
 public class ChangePwdModel {
@@ -43,8 +43,8 @@ public class ChangePwdModel {
         this.newPwd = newPwd;
     }
 
-    // Êı¾İ·Ç¿ÕĞ£Ñé
+    // æ•°æ®éç©ºæ ¡éªŒ
     public static boolean check(ChangePwdModel model) {
-        return model != null && !Strings.isNullOrEmpty(model.userId) && !Strings.isNullOrEmpty(model.oldPwd) && !Strings.isNullOrEmpty(model.newPwd);
+        return model != null && !Strings.isNullOrEmpty(model.userId) && !Strings.isNullOrEmpty(model.newPwd);
     }
 }

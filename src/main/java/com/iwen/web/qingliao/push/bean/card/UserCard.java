@@ -4,7 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.iwen.web.qingliao.push.bean.db.User;
 import com.iwen.web.qingliao.push.utils.Hib;
 
+import javax.persistence.Column;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 用户信息卡片，用于替代传递User类，防止敏感信息风险
@@ -25,6 +27,53 @@ public class UserCard {
     private String desc;
     @Expose
     private int sex = 0;
+    /**
+     * 地址
+     */
+    @Expose
+    private String address;
+
+    /**
+     * 学校
+     */
+    @Expose
+    private String school;
+
+    /**
+     * 生日
+     */
+    @Expose
+    private Date birthday;
+
+    /**
+     * 职业
+     */
+    @Expose
+    private String profession;
+
+    /**
+     * 等级
+     */
+    @Expose
+    private int grade;
+
+    /**
+     * 帖子数
+     */
+    @Expose
+    private int feednum;
+
+    /**
+     * 星座
+     */
+    @Expose
+    private int constellation;
+
+    /**
+     * 访问数量
+     */
+    @Expose
+    private int visitnum;
     // 用户信息最后的更新时间
     @Expose
     private LocalDateTime modifyAt;
@@ -49,6 +98,14 @@ public class UserCard {
         this.portrait = user.getPortrait();
         this.desc = user.getDescription();
         this.sex = user.getSex();
+        this.address = user.getAddress();
+        this.school = user.getSchool();
+        this.birthday = user.getBirthday();
+        this.profession = user.getProfession();
+        this.grade = user.getGrade();
+        this.feednum = user.getFeednum();
+        this.constellation = user.getConstellation();
+        this.visitnum = user.getVisitnum();
         this.modifyAt = user.getUpdateAt();
         this.isFollow = isFollow;
 
@@ -144,5 +201,69 @@ public class UserCard {
 
     public void setFollow(boolean follow) {
         isFollow = follow;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public int getFeednum() {
+        return feednum;
+    }
+
+    public void setFeednum(int feednum) {
+        this.feednum = feednum;
+    }
+
+    public int getConstellation() {
+        return constellation;
+    }
+
+    public void setConstellation(int constellation) {
+        this.constellation = constellation;
+    }
+
+    public int getVisitnum() {
+        return visitnum;
+    }
+
+    public void setVisitnum(int visitnum) {
+        this.visitnum = visitnum;
     }
 }

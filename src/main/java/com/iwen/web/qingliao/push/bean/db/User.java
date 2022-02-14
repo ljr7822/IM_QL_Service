@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -66,6 +67,54 @@ public class User implements Principal {
      */
     @Column(nullable = false)
     private int sex = 0;
+
+    /**
+     * 地址
+     */
+    @Column
+    private String address;
+
+    /**
+     * 学校
+     */
+    @Column
+    private String school;
+
+    /**
+     * 生日
+     */
+    @Column
+    private Date birthday;
+
+    /**
+     * 职业
+     */
+    @Column
+    private String profession;
+
+    /**
+     * 等级
+     */
+    @Column
+    private int grade;
+
+    /**
+     * 帖子数
+     */
+    @Column
+    private int feednum;
+
+    /**
+     * 星座
+     */
+    @Column
+    private int constellation;
+
+    /**
+     * 访问数量
+     */
+    @Column
+    private int visitnum;
 
     /**
      * token 可以拉取用户信息，所以token必须唯一
@@ -250,5 +299,69 @@ public class User implements Principal {
 
     public void setGroups(Set<Group> groups) {
         this.groups = groups;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public int getFeednum() {
+        return feednum;
+    }
+
+    public void setFeednum(int feednum) {
+        this.feednum = feednum;
+    }
+
+    public int getConstellation() {
+        return constellation;
+    }
+
+    public void setConstellation(int constellation) {
+        this.constellation = constellation;
+    }
+
+    public int getVisitnum() {
+        return visitnum;
+    }
+
+    public void setVisitnum(int visitnum) {
+        this.visitnum = visitnum;
     }
 }

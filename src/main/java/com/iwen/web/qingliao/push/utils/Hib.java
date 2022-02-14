@@ -1,5 +1,7 @@
 package com.iwen.web.qingliao.push.utils;
 
+import com.iwen.web.qingliao.push.bean.db.FeedComment;
+import com.iwen.web.qingliao.push.bean.db.Feeds;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -7,6 +9,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -110,7 +113,7 @@ public class Hib {
         T query(Session session);
     }
 
-    // 简化Session操作的工具方法，
+    // 简化Session查询操作的工具方法，
     // 具有一个返回值
     public static <T> T query(Query<T> query) {
         // 重开一个Session
@@ -137,5 +140,28 @@ public class Hib {
             session.close();
         }
         return t;
+    }
+
+    // 简化Session删除操作的工具方法，
+    // 具有一个返回值
+    public static void delete(Feeds feeds) {
+        // 重开一个Session
+        Session session = sessionFactory.openSession();
+        // 开启事物
+        final Transaction transaction = session.beginTransaction();
+        session.delete(feeds);
+        transaction.commit();
+        session.close();
+    }
+
+
+    public static void deleteComment(FeedComment feedComment) {
+        // 重开一个Session
+        Session session = sessionFactory.openSession();
+        // 开启事物
+        final Transaction transaction = session.beginTransaction();
+        session.delete(feedComment);
+        transaction.commit();
+        session.close();
     }
 }

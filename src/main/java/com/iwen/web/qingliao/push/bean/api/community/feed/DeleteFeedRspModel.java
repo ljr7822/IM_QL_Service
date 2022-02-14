@@ -1,19 +1,19 @@
-package com.iwen.web.qingliao.push.bean.api.account;
+package com.iwen.web.qingliao.push.bean.api.community.feed;
 
 import com.google.gson.annotations.Expose;
 
 /**
- * é€€å‡ºç™»å½•å›è°ƒçš„model
+ * É¾³ıÒ»ÌõÌû×ÓµÄ»Øµ÷model
  *
- * @Author: iwenå¤§å¤§æ€ª
- * @DateTime: 2021/05/09 20:29
+ * @Author: iwen´ó´ó¹Ö
+ * @DateTime: 2021/11/29 14:56
  */
-public class LogoutRspModel {
-    //å½“å‰ç™»å½•çš„è´¦å·
+public class DeleteFeedRspModel {
+    // É¾³ı×´Ì¬
     @Expose
     private String state;
 
-    public LogoutRspModel(String state) {
+    public DeleteFeedRspModel(String state) {
         this.state = state;
     }
 

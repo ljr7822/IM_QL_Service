@@ -1,8 +1,10 @@
 package com.iwen.web.qingliao.push.service;
 
 import com.iwen.web.qingliao.push.bean.api.base.ResponseModel;
+import com.iwen.web.qingliao.push.bean.card.GroupCard;
 import com.iwen.web.qingliao.push.bean.card.MessageCard;
 import com.iwen.web.qingliao.push.bean.db.Group;
+import com.iwen.web.qingliao.push.bean.db.GroupMember;
 import com.iwen.web.qingliao.push.bean.db.Message;
 import com.iwen.web.qingliao.push.bean.db.User;
 import com.iwen.web.qingliao.push.factory.GroupFactory;
@@ -12,11 +14,11 @@ import com.iwen.web.qingliao.push.factory.PushFactory;
 import com.iwen.web.qingliao.push.factory.UserFactory;
 import com.iwen.web.qingliao.push.utils.LogUtils;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 消息发送的入口
@@ -27,7 +29,9 @@ import javax.ws.rs.core.MediaType;
 @Path("/msg")
 public class MessageService extends BaseService {
     private static final String TAG = "msg";
-    // 发送一条消息到服务器
+    /**
+     * 发送一条消息到服务器
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -130,5 +134,29 @@ public class MessageService extends BaseService {
         // 返回
         LogUtils.error(TAG,"【msg】成功：推送并构建一个返回信息成功");
         return ResponseModel.buildOk(new MessageCard(message));
+    }
+
+    /**
+     * 取出我和某个好友的历史消息列表
+     *
+     * @param receiverId 好友id or 我的id
+     * @return List<MessageCard>
+     */
+    @GET
+    @Path("/list/{receiverId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseModel<List<MessageCard>> getMessage(@PathParam("receiverId") String receiverId){
+        LogUtils.info(TAG,"开始进入 【/list/{receiverId}】 请求");
+        User self = getSelf();
+        Set<Message> messages= MessageFactory.findHistoryMsg(receiverId,self.getId());
+        if (messages != null && messages.size() > 0) {
+            LogUtils.info(TAG,"【/list/{receiverId}】成功：查到"+messages.size()+"条历史记录");
+            List<MessageCard> messageCards = messages.stream().map(MessageCard::new).collect(Collectors.toList());
+            return ResponseModel.buildOk(messageCards);
+        }
+        // 服务器异常
+        LogUtils.error(TAG,"【/list/{receiverId}】错误：没有查到历史记录");
+        return ResponseModel.buildServiceError();
     }
 }

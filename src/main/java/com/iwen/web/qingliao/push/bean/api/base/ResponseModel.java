@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Stack;
 
 /**
  * 基本的接口返回Model封装
@@ -31,6 +32,9 @@ public class ResponseModel<M> implements Serializable {
     // 创建群成员失败
     public static final int ERROR_CREATE_MESSAGE = 3003;
 
+    // 没有更多帖子
+    public static final int NOT_HAVE_MORE_FEED = 3004;
+
     // 请求参数错误
     public static final int ERROR_PARAMETERS = 4001;
     // 请求参数错误-已存在账户
@@ -49,6 +53,9 @@ public class ResponseModel<M> implements Serializable {
     public static final int ERROR_ACCOUNT_REGISTER = 2003;
     // 没有权限操作
     public static final int ERROR_ACCOUNT_NO_PERMISSION = 2010;
+
+    // 状态变更失败
+    public static final int ERROR_STATE_CHANGE = 2004;
 
     @Expose
     private int code;
@@ -140,6 +147,10 @@ public class ResponseModel<M> implements Serializable {
         return new ResponseModel<M>(ERROR_SERVICE, "Service Error.");
     }
 
+    public static <M> ResponseModel<M> buildNotHaveMoreFeed(){
+        return new ResponseModel<M>(NOT_HAVE_MORE_FEED, "not have more feed.");
+    }
+
     public static <M> ResponseModel<M> buildNotFoundUserError(String str) {
         return new ResponseModel<M>(ERROR_NOT_FOUND_USER, str != null ? str : "Not Found User.");
     }
@@ -170,6 +181,10 @@ public class ResponseModel<M> implements Serializable {
 
     public static <M> ResponseModel<M> buildCreateError(int type) {
         return new ResponseModel<M>(type, "Create failed.");
+    }
+
+    public static <M> ResponseModel<M> buildStateChangeError() {
+        return new ResponseModel<M>(ERROR_STATE_CHANGE, "state change error.");
     }
 
 }

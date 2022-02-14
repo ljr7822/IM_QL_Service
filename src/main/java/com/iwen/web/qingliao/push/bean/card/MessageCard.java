@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 /**
  * 消息的卡片Model
+ *
  * @Author: iwen大大怪
  * @DateTime: 2021/02/14 22:06
  */

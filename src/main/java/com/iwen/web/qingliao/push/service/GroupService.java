@@ -235,19 +235,19 @@ public class GroupService extends BaseService {
         // 没有这个群
         Group group = GroupFactory.findById(groupId);
         if (group == null) {
-            LogUtils.error(TAG,"【group】错误：没有该群");
+            LogUtils.error(TAG,"【/{groupId}/members】错误：没有该群");
             return ResponseModel.buildNotFoundGroupError(null);
         }
         // 检查权限
         GroupMember selfMember = GroupFactory.getMember(self.getId(), groupId);
         if (selfMember == null){
-            LogUtils.error(TAG,"【group】错误：检查权限参数错误");
+            LogUtils.error(TAG,"【/{groupId}/members】错误：检查权限参数错误");
             return ResponseModel.buildNoPermissionError();
-    }
+        }
         // 所有的成员,必须是群成员之一
         Set<GroupMember> members = GroupFactory.getMembers(group);
         if (members == null) {
-            LogUtils.error(TAG,"【group】错误：所有的成员,必须是群成员之一");
+            LogUtils.error(TAG,"【/{groupId}/members】错误：所有的成员,必须是群成员之一");
             return ResponseModel.buildServiceError();
         }
         // 返回
@@ -256,7 +256,7 @@ public class GroupService extends BaseService {
                 .map(GroupMemberCard::new)
                 .collect(Collectors.toList());
 
-        LogUtils.info(TAG,"【group】成功：拉取一个群的所有群成员");
+        LogUtils.info(TAG,"【/{groupId}/members】成功：拉取一个群的所有群成员");
         return ResponseModel.buildOk(memberCards);
     }
 

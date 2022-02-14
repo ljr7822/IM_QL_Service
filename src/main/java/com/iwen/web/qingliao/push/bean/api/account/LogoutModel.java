@@ -4,9 +4,9 @@ import com.google.common.base.Strings;
 import com.google.gson.annotations.Expose;
 
 /**
- * ÍË³öµÇÂ¼µÄÇëÇómodel
+ * é€€å‡ºç™»å½•çš„è¯·æ±‚model
  *
- * @Author: iwen´ó´ó¹Ö
+ * @Author: iwenå¤§å¤§æ€ª
  * @DateTime: 2021/05/09 20:08
  */
 public class LogoutModel {
@@ -21,7 +21,7 @@ public class LogoutModel {
         this.account = account;
     }
 
-    // Êı¾İ·Ç¿ÕĞ£Ñé
+    // æ•°æ®éç©ºæ ¡éªŒ
     public static boolean check(LogoutModel model) {
         return model != null && !Strings.isNullOrEmpty(model.account);
     }
